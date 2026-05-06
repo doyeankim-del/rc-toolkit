@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RC 툴킷</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nanum Gothic', sans-serif;
+    background: #fff5f7;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 60px 24px;
+  }
+
+  .container { max-width: 640px; margin: 0 auto; }
+
+  header { margin-bottom: 48px; }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    color: #e85d8a;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .divider {
+    width: 32px;
+    height: 2px;
+    background: #e85d8a;
+    margin-top: 16px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    color: #d4a0b0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .tools { display: flex; flex-direction: column; gap: 10px; }
+
+  .tool-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border: 1.5px solid #ffc2d4;
+    border-radius: 14px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: #1a1a1a;
+    transition: all 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .tool-card:nth-child(1) { animation-delay: 0.05s; }
+  .tool-card:nth-child(2) { animation-delay: 0.1s; }
+  .tool-card:nth-child(3) { animation-delay: 0.15s; }
+  .tool-card:nth-child(4) { animation-delay: 0.2s; }
+
+  .tool-card:hover {
+    border-color: #e85d8a;
+    background: #fff8fa;
+    transform: translateY(-2px);
+  }
+
+  .tool-icon {
+    width: 40px;
+    height: 40px;
+    background: #ffe0eb;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .tool-info { flex: 1; }
+
+  .tool-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 3px;
+  }
+
+  .tool-desc {
+    font-size: 11px;
+    color: #e85d8a;
+  }
+
+  .tool-arrow {
+    font-size: 16px;
+    color: #ffc2d4;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .tool-card:hover .tool-arrow {
+    color: #e85d8a;
+    transform: translateX(3px);
+  }
+
+  footer {
+    margin-top: 52px;
+    padding-top: 20px;
+    border-top: 1px solid #ffd6e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-text { font-size: 11px; color: #d4a0b0; letter-spacing: 1px; }
+
+  .footer-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #e85d8a;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="subtitle">MUSINSA TALENT ACQUISITION</div>
+    <h1>RC 툴킷</h1>
+    <div class="divider"></div>
+  </header>
+
+  <div class="section-label">도구 모음</div>
+
+  <div class="tools">
+    <a class="tool-card" href="https://script.google.com/a/macros/musinsa.com/s/AKfycbzvmC1fz2vzNBy8orUKmLwVWvSVWlaK75Lt5M3nBawhrKRMGwvqtKrCUQyshbEMexJ2/exec" target="_blank">
+      <div class="tool-icon">💬</div>
+      <div class="tool-info">
+        <div class="tool-name">무신사 면접 문자 자동화</div>
+        <div class="tool-desc">면접 안내 문자를 자동으로 생성하고 발송해요</div>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+    <a class="tool-card" href="면접캘린더생성기_최종.html" target="_blank">
+      <div class="tool-icon">📅</div>
+      <div class="tool-info">
+        <div class="tool-name">면접 캘린더 생성기</div>
+        <div class="tool-desc">차수별 검증 역량을 입력하면 캘린더 설명 텍스트를 자동 생성해요</div>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+    <a class="tool-card" href="면접제목생성기.html" target="_blank">
+      <div class="tool-icon">✏️</div>
+      <div class="tool-info">
+        <div class="tool-name">면접 제목 생성기</div>
+        <div class="tool-desc">면접 캘린더 제목을 규칙에 맞게 자동 생성해요</div>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+    <a class="tool-card" href="팀캘린더.html" target="_blank">
+      <div class="tool-icon">🗓️</div>
+      <div class="tool-info">
+        <div class="tool-name">팀 캘린더</div>
+        <div class="tool-desc">팀 캘린더를 확인해요</div>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+  </div>
+
+  <footer>
+    <div class="footer-text">RC TOOLKIT · MUSINSA TA</div>
+    <div class="footer-dot"></div>
+  </footer>
+</div>
+</body>
+</html>

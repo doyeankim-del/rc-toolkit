@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>면접 캘린더 생성기</title>
+<title>캘린더 설명란 생성기</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Nanum+Gothic:wght@400;700&display=swap');
 
@@ -32,299 +32,313 @@
     padding: 40px 20px;
   }
 
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-  }
+  .container { max-width: 760px; margin: 0 auto; }
 
-  header {
-    margin-bottom: 32px;
-    text-align: center;
-  }
+  header { margin-bottom: 32px; text-align: center; }
+  header .emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+  header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
+  header p { font-size: 14px; color: var(--text2); margin-top: 6px; }
 
-  header .emoji {
-    font-size: 40px;
-    margin-bottom: 12px;
-    display: block;
+  .tabs {
+    display: flex; gap: 8px; margin-bottom: 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 6px; box-shadow: var(--shadow);
   }
-
-  header h1 {
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--text);
+  .tab-btn {
+    flex: 1; background: none; border: none; border-radius: 10px;
+    color: var(--text2); font-family: inherit; font-size: 13px; font-weight: 700;
+    padding: 10px 8px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
   }
-
-  header p {
-    font-size: 14px;
-    color: var(--text2);
-    margin-top: 6px;
-  }
+  .tab-btn:hover { color: var(--accent); background: #fff8f5; }
+  .tab-btn.active { background: var(--accent); color: white; box-shadow: 0 2px 8px rgba(255,107,53,0.3); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 14px;
-    box-shadow: var(--shadow);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: 14px; box-shadow: var(--shadow);
   }
-
-  .card-title {
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin-bottom: 16px;
-  }
-
+  .card-title { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 16px; }
   .field { margin-bottom: 14px; }
-
-  label {
-    display: block;
-    font-size: 12px;
-    color: var(--text2);
-    margin-bottom: 6px;
-    font-weight: 700;
-  }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; font-weight: 700; }
 
   input, select, textarea {
-    width: 100%;
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 14px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; color: var(--text); font-family: inherit; font-size: 14px;
+    padding: 10px 14px; outline: none; transition: border-color 0.2s;
   }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.7; }
 
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-    background: #fff;
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 90px;
-    line-height: 1.7;
-  }
-
-  .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
   .round-block {
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    margin-bottom: 12px;
-    position: relative;
-    transition: border-color 0.2s;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 18px; margin-bottom: 12px;
+    position: relative; transition: border-color 0.2s;
   }
-
   .round-block:hover { border-color: var(--accent2); }
+  .round-block .block-label { font-size: 12px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
 
-  .round-block .block-label {
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--accent);
-    margin-bottom: 12px;
+  .candidate-block {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 18px; margin-bottom: 12px;
+    position: relative; transition: border-color 0.2s;
   }
+  .candidate-block:hover { border-color: var(--accent2); }
+  .candidate-block .block-label { font-size: 12px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
 
   .remove-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    color: var(--text3);
-    cursor: pointer;
-    font-size: 18px;
-    padding: 0;
-    line-height: 1;
-    transition: color 0.2s;
+    position: absolute; top: 16px; right: 16px; background: none; border: none;
+    color: var(--text3); cursor: pointer; font-size: 18px; padding: 0; line-height: 1; transition: color 0.2s;
   }
-
   .remove-btn:hover { color: #e74c3c; }
 
   .add-btn {
-    width: 100%;
-    background: none;
-    border: 2px dashed var(--border);
-    border-radius: 10px;
-    color: var(--text2);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 4px;
+    width: 100%; background: none; border: 2px dashed var(--border); border-radius: 10px;
+    color: var(--text2); font-family: inherit; font-size: 13px; font-weight: 700;
+    padding: 12px; cursor: pointer; transition: all 0.2s; margin-top: 4px;
   }
-
-  .add-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: #fff8f5;
-  }
+  .add-btn:hover { border-color: var(--accent); color: var(--accent); background: #fff8f5; }
 
   .generate-btn {
-    width: 100%;
-    background: var(--accent);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 800;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 8px;
+    width: 100%; background: var(--accent); border: none; border-radius: 12px;
+    color: white; font-family: inherit; font-size: 15px; font-weight: 800;
+    padding: 16px; cursor: pointer; transition: all 0.2s; margin-top: 8px;
     box-shadow: 0 4px 14px rgba(255,107,53,0.3);
   }
+  .generate-btn:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255,107,53,0.35); }
 
-  .generate-btn:hover {
-    background: var(--accent2);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(255,107,53,0.35);
-  }
-
-  .output-area {
-    display: none;
-    margin-top: 20px;
-  }
-
+  .output-area { display: none; margin-top: 20px; }
   .output-area.visible { display: block; }
 
-  .output-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .output-header span {
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .output-header span { font-size: 12px; font-weight: 800; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
 
   .copy-btn {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px;
+    color: var(--text); font-family: inherit; font-size: 13px; font-weight: 700;
+    padding: 8px 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
   }
-
   .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
   .copy-btn.copied { border-color: var(--success); color: var(--success); }
 
   .output-text {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-    font-size: 13px;
-    line-height: 1.9;
-    white-space: pre-wrap;
-    color: var(--text);
-    font-family: 'Nanum Gothic', sans-serif;
-    box-shadow: var(--shadow);
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 22px; font-size: 13px; line-height: 1.9; white-space: pre-wrap;
+    color: var(--text); font-family: 'Nanum Gothic', sans-serif; box-shadow: var(--shadow);
   }
+
+  .title-box {
+    background: #fff8f5; border: 1.5px solid var(--accent); border-radius: 12px;
+    padding: 6px 0; margin-bottom: 10px; display: flex; flex-direction: column;
+  }
+  .title-box-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; }
+  .title-label { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; min-width: 64px; }
+  .title-value { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; font-family: 'Nanum Gothic', sans-serif; }
+
+  .copy-title-btn {
+    background: var(--accent); border: none; border-radius: 8px; color: white;
+    font-family: inherit; font-size: 12px; font-weight: 700; padding: 6px 12px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px; white-space: nowrap;
+  }
+  .copy-title-btn:hover { background: var(--accent2); }
+  .copy-title-btn.copied { background: var(--success); }
+
+  .output-text-wrapper { position: relative; }
+  .output-text-wrapper .copy-body-btn {
+    position: absolute; top: 12px; right: 14px;
+    background: white; border: 2px solid var(--accent); border-radius: 8px;
+    color: var(--accent); font-family: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 4px;
+    transition: all 0.2s; z-index: 1;
+  }
+  .output-text-wrapper .copy-body-btn:hover { background: #fff8f5; }
+  .output-text-wrapper .copy-body-btn.copied { background: var(--success); border-color: var(--success); color: white; }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
     <span class="emoji">📅</span>
-    <h1>면접 캘린더 설명 생성기</h1>
-    <p>차수별 정보를 입력하면 캘린더 설명란에 바로 붙여넣을 수 있는 텍스트를 만들어드려요</p>
+    <h1>캘린더 설명란 생성기</h1>
+    <p>유형을 선택하고 정보를 입력하면 캘린더 설명란에 바로 붙여넣을 수 있는 텍스트를 만들어드려요</p>
   </header>
 
-  <div class="card">
-    <div class="card-title">📌 기본 정보</div>
-    <div class="row">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('interview')">🗓 면접</button>
+    <button class="tab-btn" onclick="switchTab('kickoff')">🚀 킥오프</button>
+    <button class="tab-btn" onclick="switchTab('debrief')">📝 디브리프</button>
+  </div>
+
+  <!-- 면접 탭 -->
+  <div class="tab-panel active" id="tab-interview">
+    <div class="card">
+      <div class="card-title">📌 기본 정보</div>
+      <div class="row">
+        <div class="field">
+          <label>면접 유형</label>
+          <select id="roundType" onchange="updateLabels()">
+            <option value="1">1차 면접</option>
+            <option value="2" selected>2차 면접</option>
+            <option value="3">3차 면접</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>후보자 이름</label>
+          <input type="text" id="candidate" placeholder="예: 홍길동">
+        </div>
+      </div>
       <div class="field">
-        <label>면접 유형</label>
-        <select id="roundType" onchange="updateLabels()">
-          <option value="1">1차 면접</option>
-          <option value="2" selected>2차 면접</option>
-          <option value="3">3차 면접</option>
+        <label>킥오프 문서 링크</label>
+        <input type="text" id="kickoff" placeholder="https://docs.google.com/...">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">👤 차수별 면접관 정보</div>
+      <div id="rounds"></div>
+      <button class="add-btn" onclick="addRound()">+ 차수 추가</button>
+    </div>
+    <button class="generate-btn" onclick="generateInterview()">📋 캘린더 텍스트 생성하기</button>
+    <div class="output-area" id="outputArea-interview">
+      <div class="output-header">
+        <span>✨ 생성된 텍스트</span>
+        <button class="copy-btn" id="copyBtn-interview" onclick="copyText('interview')"><span>📋</span> 복사하기</button>
+      </div>
+      <div class="output-text" id="outputText-interview"></div>
+    </div>
+  </div>
+
+  <!-- 킥오프 탭 -->
+  <div class="tab-panel" id="tab-kickoff">
+    <div class="card">
+      <div class="card-title">🚀 킥오프 기본 정보</div>
+      <div class="field"><label>TA 담당자 이름</label><input type="text" id="ko-ta" placeholder="예: 홍길동"></div>
+      <div class="field"><label>공고명</label><input type="text" id="ko-position" placeholder="예: Software Engineer"></div>
+      <div class="field">
+        <label>진행 방식</label>
+        <select id="ko-mode" onchange="toggleKoMode()">
+          <option value="대면">대면</option>
+          <option value="비대면">비대면</option>
         </select>
       </div>
-      <div class="field">
-        <label>후보자 이름</label>
-        <input type="text" id="candidate" placeholder="예: 홍길동">
+      <div class="row" id="ko-location-row">
+        <div class="field">
+          <label>건물</label>
+          <select id="ko-building">
+            <option value="">선택</option>
+            <option value="N1">N1</option><option value="E1">E1</option><option value="W1">W1</option>
+            <option value="E2">E2</option><option value="한남">한남</option><option value="동대문">동대문</option><option value="여주센터">여주센터</option>
+          </select>
+        </div>
+        <div class="field"><label>호실</label><input type="text" id="ko-room" placeholder="예: 210 (숫자만)"></div>
+      </div>
+      <div class="field"><label>킥오프 문서 링크</label><input type="text" id="ko-doclink" placeholder="https://docs.google.com/..."></div>
+    </div>
+    <button class="generate-btn" onclick="generateKickoff()">📋 캘린더 텍스트 생성하기</button>
+    <div class="output-area" id="outputArea-kickoff">
+      <div class="output-header"><span>✨ 생성된 텍스트</span></div>
+      <div class="title-box" id="titleBox-kickoff">
+        <div class="title-box-row">
+          <div class="title-label">📌 캘린더 제목</div>
+          <div class="title-value" id="titleText-kickoff"></div>
+          <button class="copy-title-btn" onclick="copyTitle('kickoff')"><span>📋</span> 제목 복사</button>
+        </div>
+      </div>
+      <div class="output-text-wrapper">
+        <button class="copy-body-btn" id="copyBtn-kickoff" onclick="copyText('kickoff')"><span>📋</span> 본문 복사</button>
+        <div class="output-text" id="outputText-kickoff"></div>
       </div>
     </div>
-    <div class="field">
-      <label>킥오프 문서 링크</label>
-      <input type="text" id="kickoff" placeholder="https://docs.google.com/...">
-    </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">👤 차수별 면접관 정보</div>
-    <div id="rounds"></div>
-    <button class="add-btn" onclick="addRound()">+ 차수 추가</button>
-  </div>
-
-  <button class="generate-btn" onclick="generate()">📋 캘린더 텍스트 생성하기</button>
-
-  <div class="output-area" id="outputArea">
-    <div class="output-header">
-      <span>✨ 생성된 텍스트</span>
-      <button class="copy-btn" id="copyBtn" onclick="copyText()">
-        <span>📋</span> 복사하기
-      </button>
+  <!-- 디브리프 탭 -->
+  <div class="tab-panel" id="tab-debrief">
+    <div class="card">
+      <div class="card-title">📝 디브리프 기본 정보</div>
+      <div class="field">
+        <label>미팅 유형</label>
+        <select id="db-type" onchange="toggleDebriefType()">
+          <option value="일반">일반 디브리프</option>
+          <option value="역쉐도잉">역쉐도잉 디브리프</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="field"><label>TA 담당자 이름</label><input type="text" id="db-ta" placeholder="예: 홍길동"></div>
+        <div class="field"><label>공고명 (포지션)</label><input type="text" id="db-position" placeholder="예: Software Engineer"></div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>건물</label>
+          <select id="db-building">
+            <option value="">선택</option>
+            <option value="N1">N1</option><option value="E1">E1</option><option value="W1">W1</option>
+            <option value="E2">E2</option><option value="한남">한남</option><option value="동대문">동대문</option><option value="여주센터">여주센터</option>
+          </select>
+        </div>
+        <div class="field"><label>호실</label><input type="text" id="db-room" placeholder="예: 210 (숫자만)"></div>
+      </div>
     </div>
-    <div class="output-text" id="outputText"></div>
+    <div class="card" id="db-candidates-card">
+      <div class="card-title">👤 후보자 정보</div>
+      <div id="candidates"></div>
+      <button class="add-btn" onclick="addCandidate()">+ 후보자 추가</button>
+    </div>
+    <div class="card" id="db-shadow-card" style="display:none;">
+      <div class="card-title">👥 역쉐도잉 참여자 정보</div>
+      <div class="round-block">
+        <div class="block-label">역쉐도어</div>
+        <div class="field"><label>이름</label><input type="text" id="db-shadow-name" placeholder="예: 김두형"></div>
+      </div>
+      <div class="round-block">
+        <div class="block-label">Certification 대상자</div>
+        <div class="field"><label>이름</label><input type="text" id="db-cert-name" placeholder="예: 최형원"></div>
+      </div>
+    </div>
+    <button class="generate-btn" onclick="generateDebrief()">📋 캘린더 텍스트 생성하기</button>
+    <div class="output-area" id="outputArea-debrief">
+      <div class="output-header"><span>✨ 생성된 텍스트</span></div>
+      <div class="title-box" id="titleBox-debrief">
+        <div class="title-box-row">
+          <div class="title-label">📌 캘린더 제목</div>
+          <div class="title-value" id="titleText-debrief"></div>
+          <button class="copy-title-btn" onclick="copyTitle('debrief')"><span>📋</span> 제목 복사</button>
+        </div>
+      </div>
+      <div class="output-text-wrapper">
+        <button class="copy-body-btn" id="copyBtn-debrief" onclick="copyText('debrief')"><span>📋</span> 본문 복사</button>
+        <div class="output-text" id="outputText-debrief"></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
   const MUSINSA_WAY_LINK = 'https://wiki.team.musinsa.com/wiki/spaces/MW/pages/50745579/MUSINSA+WAY+Interview+Deck';
 
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
   function formatTime(input) {
     if (!input) return '';
-    // 이미 콜론 포함된 경우 (예: 14:30) 그대로
     if (input.includes(':')) return input;
-    // 숫자만 입력한 경우 (예: 14 → 14:00, 1430 → 14:30)
     if (/^\d{1,2}$/.test(input)) return `${input}:00`;
-    if (/^\d{3,4}$/.test(input)) {
-      const h = input.slice(0, -2);
-      const m = input.slice(-2);
-      return `${h}:${m}`;
-    }
+    if (/^\d{3,4}$/.test(input)) { const h = input.slice(0, -2); const m = input.slice(-2); return `${h}:${m}`; }
     return input;
   }
-  let roundCount = 0;
-  let roundIds = [];
+
+  let roundCount = 0, roundIds = [];
 
   function addRound() {
     roundCount++;
     const id = roundCount;
     roundIds.push(id);
-
     const div = document.createElement('div');
     div.className = 'round-block';
     div.id = `round-${id}`;
@@ -332,20 +346,13 @@
       <div class="block-label" id="label-${id}"></div>
       <button class="remove-btn" onclick="removeRound(${id})">✕</button>
       <div class="row">
-        <div class="field">
-          <label>면접관 이름</label>
-          <input type="text" id="iname-${id}" placeholder="예: 유영구">
-        </div>
-        <div class="field">
-          <label>면접 시작 시간</label>
-          <input type="text" id="itime-${id}" placeholder="예: 14 또는 1430">
-        </div>
+        <div class="field"><label>면접관 이름</label><input type="text" id="iname-${id}" placeholder="예: 유영구"></div>
+        <div class="field"><label>면접 시작 시간</label><input type="text" id="itime-${id}" placeholder="예: 14 또는 1430"></div>
       </div>
       <div class="field">
         <label>검증 역량 (역량명: 내용 형식으로 입력, 줄바꿈으로 구분)</label>
         <textarea id="icomp-${id}" placeholder="경계를 넘는 협업: 다부서가 관여하는 프로젝트를 리딩하며...&#10;오너십: 본인이 주도적으로 방향을 제안하고..."></textarea>
-      </div>
-    `;
+      </div>`;
     document.getElementById('rounds').appendChild(div);
     updateLabels();
   }
@@ -359,124 +366,253 @@
 
   function updateLabels() {
     const roundType = document.getElementById('roundType').value;
-    const activeIds = roundIds.filter(id => document.getElementById(`round-${id}`));
-    activeIds.forEach((id, i) => {
+    roundIds.filter(id => document.getElementById(`round-${id}`)).forEach((id, i) => {
       const label = document.getElementById(`label-${id}`);
       if (label) label.textContent = `${roundType}-${i + 1}차 면접관`;
     });
   }
 
-  function generate() {
+  function generateInterview() {
     const roundType = document.getElementById('roundType').value;
     const kickoff = document.getElementById('kickoff').value.trim();
     const activeIds = roundIds.filter(id => document.getElementById(`round-${id}`));
-
-    if (activeIds.length === 0) {
-      alert('차수를 최소 1개 추가해주세요!');
-      return;
-    }
-
-    // HTML 버전 (복사용)
-    let html = '';
-    html += `<b>[검증 영역]</b>`;
-    html += `<ul>`;
-
+    if (activeIds.length === 0) { alert('차수를 최소 1개 추가해주세요!'); return; }
+    let html = `<b>[검증 영역]</b><ul>`;
     activeIds.forEach((id, i) => {
       const name = document.getElementById(`iname-${id}`).value.trim();
-      const rawTime = document.getElementById(`itime-${id}`).value.trim();
-      const time = formatTime(rawTime);
+      const time = formatTime(document.getElementById(`itime-${id}`).value.trim());
       const comp = document.getElementById(`icomp-${id}`).value.trim();
-
       html += `<li style="margin-bottom:10px">${roundType}-${i + 1}차 ${name} 님 (${time})`;
-
       if (comp) {
         html += `<ul>`;
         comp.split('\n').forEach(line => {
-          line = line.trim();
-          if (!line) return;
-          const colonIdx = line.indexOf(':');
-          if (colonIdx > -1) {
-            const title = line.substring(0, colonIdx).trim();
-            const content = line.substring(colonIdx + 1).trim();
-            html += `<li><b>${title}:</b> ${content}</li>`;
-          } else {
-            html += `<li>${line}</li>`;
-          }
+          line = line.trim(); if (!line) return;
+          const ci = line.indexOf(':');
+          if (ci > -1) html += `<li><b>${line.substring(0, ci).trim()}:</b> ${line.substring(ci + 1).trim()}</li>`;
+          else html += `<li>${line}</li>`;
         });
         html += `</ul>`;
       }
       html += `</li>${i < activeIds.length - 1 ? '<br>' : ''}`;
     });
-
-    html += `</ul>`;
-    html += `<br><b>[참고 사항]</b><br>`;
-    html += `• <a href="${MUSINSA_WAY_LINK}">MUSINSA WAY Interview Deck</a><br>`;
+    html += `</ul><br><b>[참고 사항]</b><br>• <a href="${MUSINSA_WAY_LINK}">MUSINSA WAY Interview Deck</a><br>`;
     if (kickoff) html += `• <a href="${kickoff}">킥오프 문서</a><br>`;
-
-    // 미리보기용 텍스트
-    let preview = '';
-    preview += `[검증 영역]\n\n`;
-
+    let preview = `[검증 영역]\n\n`;
     activeIds.forEach((id, i) => {
       const name = document.getElementById(`iname-${id}`).value.trim();
-      const rawTime = document.getElementById(`itime-${id}`).value.trim();
-      const time = formatTime(rawTime);
+      const time = formatTime(document.getElementById(`itime-${id}`).value.trim());
       const comp = document.getElementById(`icomp-${id}`).value.trim();
-
       preview += `• ${roundType}-${i + 1}차 ${name} 님 (${time})\n`;
-
       if (comp) {
         comp.split('\n').forEach(line => {
-          line = line.trim();
-          if (!line) return;
-          const colonIdx = line.indexOf(':');
-          if (colonIdx > -1) {
-            const title = line.substring(0, colonIdx).trim();
-            const content = line.substring(colonIdx + 1).trim();
-            preview += `   • ${title}: ${content}\n`;
-          } else {
-            preview += `   • ${line}\n`;
-          }
+          line = line.trim(); if (!line) return;
+          const ci = line.indexOf(':');
+          if (ci > -1) preview += `   • ${line.substring(0, ci).trim()}: ${line.substring(ci + 1).trim()}\n`;
+          else preview += `   • ${line}\n`;
         });
       }
       preview += `\n`;
     });
-
-    preview += `[참고 사항]\n\n`;
-    preview += `• MUSINSA WAY Interview Deck (링크 포함)\n`;
+    preview += `[참고 사항]\n\n• MUSINSA WAY Interview Deck (링크 포함)\n`;
     if (kickoff) preview += `• 킥오프 문서 (링크 포함)\n`;
-
-    // 저장
-    document.getElementById('outputText').textContent = preview;
-    document.getElementById('outputText').setAttribute('data-html', html);
-    document.getElementById('outputArea').classList.add('visible');
-    document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth' });
+    setOutput('interview', preview, html);
   }
 
-  function copyText() {
-    const html = document.getElementById('outputText').getAttribute('data-html');
-    if (!html) return;
+  function toggleKoMode() {
+    const mode = document.getElementById('ko-mode').value;
+    const label = document.querySelector('#ko-location-row .field:first-child label');
+    if (label) label.textContent = mode === '비대면' ? '건물명 (비대면 안내용)' : '건물';
+  }
 
+  function generateKickoff() {
+    const ta = document.getElementById('ko-ta').value.trim();
+    const koPosition = document.getElementById('ko-position').value.trim();
+    const mode = document.getElementById('ko-mode').value;
+    const building = document.getElementById('ko-building').value.trim();
+    const roomRaw = document.getElementById('ko-room').value.trim();
+    const room = roomRaw ? `${roomRaw}호` : '';
+    const doclink = document.getElementById('ko-doclink').value.trim();
+    if (!ta) { alert('TA 담당자 이름을 입력해주세요!'); return; }
+    const title = koPosition ? `[Kick-off] ${koPosition}` : '[Kick-off]';
+    const loc = building && room ? `${building}, ${room}` : (building || room || '');
+    const docHtml = doclink ? `<a href="${doclink}"><b><u>킥오프 문서</u></b></a>` : '<b><u>킥오프 문서</u></b> (링크 첨부 필요)';
+    let firstLine_html, firstLine_preview;
+    if (mode === '대면') {
+      firstLine_html = `Kick-off 미팅은 <b>${loc || '(장소 미입력)'}</b> 에서 <b>대면으로 약 30분 동안</b> 진행됩니다.`;
+      firstLine_preview = `Kick-off 미팅은 ${loc || '(장소 미입력)'} 에서 대면으로 약 30분 동안 진행됩니다.`;
+    } else {
+      const noteHtml = loc ? `<br><b>(${loc} 사용 가능하십니다.)</b>` : '';
+      const notePreview = loc ? `\n(${loc} 사용 가능하십니다.)` : '';
+      firstLine_html = `Kick-off 미팅은 <b>비대면</b> 으로 약 <b>30분 동안</b> 진행됩니다.${noteHtml}`;
+      firstLine_preview = `Kick-off 미팅은 비대면 으로 약 30분 동안 진행됩니다.${notePreview}`;
+    }
+    const html =
+      `안녕하세요,<br>Talent Acquisition ${ta} 입니다.<br><br>` +
+      `${firstLine_html}<br><br>` +
+      `Kick-off 미팅의 목적은 HM와 2차 면접관, 리크루터가 포지션에 대한 이해를 바탕으로 2차 면접 검증 영역을 align 하는 것입니다.진행 순서는 아래와 같습니다.<br><br>` +
+      `<ol style="padding-left:20px; margin:0 0 12px 0;">` +
+      `<li style="margin-bottom:8px;">HM가 주관하여 미팅을 진행하며 현재 채용 포지션 상황과 이에 기반 하여 검증이 요구되는 역량에 대한 기대 수준을 2차 면접관들에게 공유합니다.</li>` +
+      `<li style="margin-bottom:8px;">HM가 2차 면접에서 어떤 역량/경험을 중점적으로 검증해야하는지 <b>2차 면접 면접관에게 검증영역을 의뢰하고 면접관들에게 공유합니다.</b></li>` +
+      `<li style="margin-bottom:8px;">추가적인 질문이 있다면 자유롭게 논의한 후 미팅을 마무리하고 2차 면접 일정 어레인지를 코디네이터에게 요청합니다.</li>` +
+      `</ol>* 참고<br>&nbsp;&nbsp;&nbsp;&nbsp;• ${docHtml}<br><br>감사합니다.<br>${ta} 드림`;
+    const preview =
+      `안녕하세요,\nTalent Acquisition ${ta} 입니다.\n\n` +
+      `${firstLine_preview}\n\n` +
+      `Kick-off 미팅의 목적은 HM와 2차 면접관, 리크루터가 포지션에 대한 이해를 바탕으로 2차 면접 검증 영역을 align 하는 것입니다.진행 순서는 아래와 같습니다.\n\n` +
+      `1. HM가 주관하여 미팅을 진행하며 현재 채용 포지션 상황과 이에 기반 하여 검증이 요구되는 역량에 대한 기대 수준을 2차 면접관들에게 공유합니다.\n` +
+      `2. HM가 2차 면접에서 어떤 역량/경험을 중점적으로 검증해야하는지 2차 면접 면접관에게 검증영역을 의뢰하고 면접관들에게 공유합니다.\n` +
+      `3. 추가적인 질문이 있다면 자유롭게 논의한 후 미팅을 마무리하고 2차 면접 일정 어레인지를 코디네이터에게 요청합니다.\n\n` +
+      `* 참고\n    • 킥오프 문서${doclink ? ' (링크 포함)' : ' (링크 첨부 필요)'}\n\n감사합니다.\n${ta} 드림`;
+    setOutput('kickoff', preview, html, title);
+  }
+
+  let candidateCount = 0, candidateIds = [];
+
+  function addCandidate() {
+    candidateCount++;
+    const id = candidateCount;
+    candidateIds.push(id);
+    const div = document.createElement('div');
+    div.className = 'candidate-block';
+    div.id = `candidate-${id}`;
+    div.innerHTML = `
+      <div class="block-label">후보자</div>
+      <button class="remove-btn" onclick="removeCandidate(${id})">✕</button>
+      <div class="row">
+        <div class="field"><label>후보자 이름</label><input type="text" id="cname-${id}" placeholder="예: 오시현"></div>
+        <div class="field"><label>GreetingHR 링크</label><input type="text" id="clink-${id}" placeholder="https://app.greetinghr.com/..."></div>
+      </div>`;
+    document.getElementById('candidates').appendChild(div);
+    updateCandidateLabels();
+  }
+
+  function removeCandidate(id) {
+    const el = document.getElementById(`candidate-${id}`);
+    if (el) el.remove();
+    candidateIds = candidateIds.filter(c => c !== id);
+    updateCandidateLabels();
+  }
+
+  function updateCandidateLabels() {
+    candidateIds.filter(id => document.getElementById(`candidate-${id}`)).forEach((id, i) => {
+      const block = document.getElementById(`candidate-${id}`);
+      if (block) block.querySelector('.block-label').textContent = `후보자 ${i + 1}`;
+    });
+  }
+
+  function toggleDebriefType() {
+    const type = document.getElementById('db-type').value;
+    document.getElementById('db-candidates-card').style.display = type === '일반' ? '' : 'none';
+    document.getElementById('db-shadow-card').style.display = type === '역쉐도잉' ? '' : 'none';
+  }
+
+  function generateDebrief() {
+    const type = document.getElementById('db-type').value;
+    const ta = document.getElementById('db-ta').value.trim();
+    const position = document.getElementById('db-position').value.trim();
+    const dbBuilding = document.getElementById('db-building').value.trim();
+    const dbRoomRaw = document.getElementById('db-room').value.trim();
+    const dbRoom = dbRoomRaw ? `${dbRoomRaw}호` : '';
+    const location = dbBuilding && dbRoom ? `${dbBuilding}, ${dbRoom}` : (dbBuilding || dbRoom || '');
+    const loc = location || '(회의실 미입력)';
+    if (!ta) { alert('TA 담당자 이름을 입력해주세요!'); return; }
+
+    if (type === '역쉐도잉') {
+      const shadowName = document.getElementById('db-shadow-name').value.trim() || '(이름 미입력)';
+      const certName = document.getElementById('db-cert-name').value.trim() || '(이름 미입력)';
+      const title = position ? `[Debrief] Live Coding Reverse Shadow - ${position}` : '[Debrief] Live Coding Reverse Shadow';
+      const html =
+        `안녕하세요.<br>Talent Acquisition ${ta}입니다.<br><br>` +
+        `${position ? `<b>${position}</b> ` : ''}Debrief 미팅 인비테이션 드립니다.<br><br>` +
+        `<b>${loc}</b>에서 약 30분 간 진행 예정이며,<br>대면 참여가 어려우실 경우 비대면으로 참여 부탁드립니다.<br><br>` +
+        `<ul style="padding-left:20px; margin:0 0 12px 0;">` +
+        `<li>역쉐도어 : <b>${shadowName}님</b></li>` +
+        `<li>Certification 대상자 : <b>${certName}님</b></li>` +
+        `</ul><br><i><u><b>역쉐도어는 미팅 전까지 반드시 평가표 작성을 부탁드립니다.</b></u></i>`;
+      const preview =
+        `안녕하세요.\nTalent Acquisition ${ta}입니다.\n\n` +
+        `${position ? `${position} ` : ''}Debrief 미팅 인비테이션 드립니다.\n\n` +
+        `${loc}에서 약 30분 간 진행 예정이며,\n대면 참여가 어려우실 경우 비대면으로 참여 부탁드립니다.\n\n` +
+        `• 역쉐도어 : ${shadowName}님\n• Certification 대상자 : ${certName}님\n\n` +
+        `역쉐도어는 미팅 전까지 반드시 평가표 작성을 부탁드립니다.`;
+      setOutput('debrief', preview, html, title);
+      return;
+    }
+
+    const activeIds = candidateIds.filter(id => document.getElementById(`candidate-${id}`));
+    if (activeIds.length === 0) { alert('후보자를 최소 1명 추가해주세요!'); return; }
+    const candidateNames = activeIds.map(id => document.getElementById(`cname-${id}`).value.trim() || '(이름 미입력)').join(', ');
+    const candidateNamesHtml = activeIds.map(id => `<b>${document.getElementById(`cname-${id}`).value.trim() || '(이름 미입력)'}</b>`).join(', ');
+    let candidateListHtml = '';
+    activeIds.forEach(id => {
+      const name = document.getElementById(`cname-${id}`).value.trim() || '(이름 미입력)';
+      const link = document.getElementById(`clink-${id}`).value.trim();
+      candidateListHtml += link ? `- <a href="${link}"><b><u>${name}</u></b></a><br>` : `- <b><u>${name}</u></b> (링크 첨부 필요)<br>`;
+    });
+    const html =
+      `안녕하세요,<br>Talent Acquisition ${ta} 입니다.<br><br>` +
+      `${position ? `<b>${position}</b> ` : ''}포지션 ${candidateNamesHtml} 님 Debrief 미팅 인비테이션 드립니다.<br><br>` +
+      `무신사 캠퍼스 <b>${loc}</b> 에서 약 30분 간 진행 예정이며, 대면으로 참석이 어려우신 분은 비대면으로 참석 부탁드립니다.<br><br>` +
+      `이력서 및 스코어카드는 하기 후보자 프로필 링크를 통하여 확인 부탁 드리겠습니다.<br><br>감사합니다.<br><br>` +
+      `<b>지원자 정보</b><br>` + candidateListHtml;
+    let candidateListPreview = '';
+    activeIds.forEach(id => {
+      const name = document.getElementById(`cname-${id}`).value.trim() || '(이름 미입력)';
+      const link = document.getElementById(`clink-${id}`).value.trim();
+      candidateListPreview += `- ${name}${link ? ' (링크 포함)' : ' (링크 첨부 필요)'}\n`;
+    });
+    const preview =
+      `안녕하세요,\nTalent Acquisition ${ta} 입니다.\n\n` +
+      `${position ? `${position} ` : ''}포지션 ${candidateNames}님 Debrief 미팅 인비테이션 드립니다.\n\n` +
+      `무신사 캠퍼스 ${loc} 에서 약 30분 간 진행 예정이며, 대면으로 참석이 어려우신 분은 비대면으로 참석 부탁드립니다.\n` +
+      `이력서 및 스코어카드는 하기 후보자 프로필 링크를 통하여 확인 부탁 드리겠습니다.\n\n감사합니다.\n\n지원자 정보\n` + candidateListPreview;
+    setOutput('debrief', preview, html, position ? `[Debrief] ${position} - ${candidateNames}` : `[Debrief] ${candidateNames}`);
+  }
+
+  function setOutput(type, preview, html, title) {
+    const textEl = document.getElementById(`outputText-${type}`);
+    const areaEl = document.getElementById(`outputArea-${type}`);
+    textEl.textContent = preview;
+    textEl.setAttribute('data-html', html);
+    if (title) {
+      document.getElementById(`titleText-${type}`).textContent = title;
+      document.getElementById(`titleBox-${type}`).style.display = 'flex';
+    }
+    areaEl.classList.add('visible');
+    areaEl.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function copyTitle(type) {
+    const title = document.getElementById(`titleText-${type}`).textContent;
+    if (!title) return;
+    navigator.clipboard.writeText(title).then(() => {
+      const btn = event.currentTarget;
+      btn.classList.add('copied');
+      btn.innerHTML = '<span>✅</span> 복사됨!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span>📋</span> 제목 복사'; }, 2000);
+    });
+  }
+
+  function copyText(type) {
+    const html = document.getElementById(`outputText-${type}`).getAttribute('data-html');
+    if (!html) return;
     try {
       const blob = new Blob([html], { type: 'text/html' });
-      const item = new ClipboardItem({ 'text/html': blob });
-      navigator.clipboard.write([item]).then(() => {
-        const btn = document.getElementById('copyBtn');
-        btn.classList.add('copied');
-        btn.innerHTML = '<span>✅</span> 복사됨!';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.innerHTML = '<span>📋</span> 복사하기';
-        }, 2000);
-      });
+      navigator.clipboard.write([new ClipboardItem({ 'text/html': blob })]).then(() => showCopied(type));
     } catch (e) {
-      // fallback
-      navigator.clipboard.writeText(document.getElementById('outputText').textContent);
+      navigator.clipboard.writeText(document.getElementById(`outputText-${type}`).textContent).then(() => showCopied(type));
     }
   }
 
-  addRound();
-  addRound();
+  function showCopied(type) {
+    const btn = document.getElementById(`copyBtn-${type}`);
+    btn.classList.add('copied');
+    btn.innerHTML = '<span>✅</span> 복사됨!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span>📋</span> 본문 복사'; }, 2000);
+  }
+
+  addRound(); addRound();
+  addCandidate();
 </script>
 </body>
 </html>
